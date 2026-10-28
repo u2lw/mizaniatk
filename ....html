@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday Alghand!</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500&family=Caveat:wght@600&family=Fraunces:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+:root{--heart:#ff5c8a;--pink:#ff69b4;--ink:#ffe6ee;--muted:#f2a7bf;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#4a0f3a}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 35%,#8a1f55 0%,#52123f 55%,#330b33 100%) fixed;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px 20px 32px;overflow-x:hidden;font-family:Georgia,serif}
+button.heart{all:unset;cursor:pointer;display:block;width:min(92vw,460px)}
+button.heart:focus-visible{outline:3px dashed var(--pink);outline-offset:6px;border-radius:24px}
+canvas{display:block;width:100%;height:auto}
+canvas.beat{transform-origin:50% 48%;animation:beat 2.6s ease-in-out infinite}
+button.heart.pop{animation:pop .7s ease}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+@keyframes pop{0%{transform:scale(1)}30%{transform:scale(1.15)}60%{transform:scale(.97)}100%{transform:scale(1)}}
+h1{font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:500;color:var(--pink);font-size:clamp(1.7rem,7vw,2.8rem);margin:4px 0 0;line-height:1.2;opacity:0;transition:opacity 1.2s ease}
+.hint{font-family:"Caveat",cursive,sans-serif;font-size:1.5rem;color:var(--muted);margin:6px 0 0;opacity:0;transition:opacity 1s ease}
+.on{opacity:1}
+.msg{max-width:34ch;font-family:"Tajawal",Tahoma,Arial,sans-serif;font-size:1.35rem;line-height:1.9;margin:12px auto 0;max-height:0;opacity:0;overflow:hidden;transition:max-height .8s ease,opacity .8s ease}
+.msg.show{max-height:800px;opacity:1}
+a.song{display:inline-block;margin-top:18px;padding:10px 22px;border-radius:999px;background:var(--heart);color:#fff;text-decoration:none;font-size:1.1rem}
+a.song:focus-visible{outline:3px dashed var(--pink);outline-offset:4px}
+.fly{position:fixed;pointer-events:none;color:var(--heart);animation:fly 2.2s ease-out forwards;z-index:5}
+@keyframes fly{to{transform:translateY(-70vh) rotate(var(--r));opacity:0}}
+.p{position:fixed;pointer-events:none;z-index:6;line-height:1;animation:out 1.5s cubic-bezier(.1,.7,.3,1) forwards}
+@keyframes out{to{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(.4);opacity:0}}
+.ring{position:fixed;pointer-events:none;z-index:6;width:40px;height:40px;margin:-20px 0 0 -20px;border:4px solid var(--heart);border-radius:50%;animation:ring 1s ease-out forwards}
+@keyframes ring{from{transform:scale(1);opacity:.9}to{transform:scale(14);opacity:0}}
+@media (prefers-reduced-motion:reduce){canvas.beat,button.heart.pop{animation:none}.fly,.p,.ring{display:none}}
+</style>
+</head>
+<body>
+<button class="heart" id="h" aria-label="Open your birthday message"><canvas id="c" width="900" height="800" role="img" aria-label="A big glowing pink heart"></canvas></button>
+<h1 id="t">Happy Birthday to You, Alghand!</h1>
+<p class="hint" id="hint">tap the heart</p>
+<p class="msg" id="m" dir="rtl" lang="ar">كل عااام وانتي بخير ياقلبي وكل عام وانتي قلببي وروحي وحياتي كللهااا 🥺❤️❤️، اسف على كل مره زعلتك فيها وعلى كل مره بكيتك فيها لان عيونك اغلى عيون والله اغلى ما املك، وادري مانتكلم كثير اخر كم يوم بس احبك مره ومقدر بدونك والله يابعد روحي انتي سامحيني على كل شي، والله بس افكر فيك لانك شاغلة كل تفكيري. قسم احلى يوم ترا يوم ميلادك لانه مميز وانتي صدق مميييزة. مممممووواااحح قلبي انتي قسم الله يخليك لي ولايحرمني منك يابعد الدنيا انتي دنيتي انتي قسم يغنو والله مقدر بدونك ابد ولا عمري بقدر بدونك ابيك معي طول عمري  لانك زوجتي وكل حياتي انتي❤️❤️❤️<br><a class="song" href="https://music.youtube.com/watch?v=5x1REZmbYdw" target="_blank" rel="noopener">🎵 اسمعي الاغنية</a></p>
+<script>
+var h=document.getElementById('h'),c=document.getElementById('c'),m=document.getElementById('m'),hint=document.getElementById('hint'),t=document.getElementById('t');
+var ctx=c.getContext('2d'),N=30000,done=0,
+reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function hp(a,s){return [16*Math.pow(Math.sin(a),3)*s,(13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a))*s]}
+function stroke(){
+var a=Math.random()*Math.PI*2,p=hp(a,Math.random()<.12?15+Math.random()*2:Math.sqrt(Math.random())*17),x=p[0],y=p[1];
+var ang=Math.atan2(y,x)+(Math.random()-.5),len=4+Math.random()*9;
+var cx=450,cy=370;
+ctx.strokeStyle='rgba(255,'+Math.round(77+Math.random()*100)+','+Math.round(153+Math.random()*102)+',.9)';
+ctx.lineWidth=1.2+Math.random()*1.6;
+ctx.beginPath();ctx.moveTo(cx+x,cy-y);ctx.lineTo(cx+x+len*Math.cos(ang),cy-(y+len*Math.sin(ang)));ctx.stroke();
+}
+function finish(){c.classList.add('beat');setTimeout(function(){t.classList.add('on');hint.classList.add('on')},reduce?0:2500)}
+function frame(){
+for(var i=0;i<40&&done<N;i++){stroke();done++}
+if(done<N){requestAnimationFrame(frame)}else{finish()}
+}
+ctx.lineCap='round';
+if(reduce){for(;done<N;done++)stroke();finish()}else{requestAnimationFrame(frame)}
+function burst(){
+var r=h.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.46;
+var ring=document.createElement('span');ring.className='ring';ring.style.left=cx+'px';ring.style.top=cy+'px';document.body.appendChild(ring);setTimeout(function(){ring.remove()},1100);
+var sym=['\u2665','\u2728','\u2726','\u2665','\u25CF'],col=['#ff5c8a','#ff8fa8','#ffc2d0','#ffd36b','#ffffff'];
+for(var i=0;i<42;i++){var s=document.createElement('span');s.className='p';s.textContent=sym[i%sym.length];
+var a=Math.random()*Math.PI*2,d=130+Math.random()*230;
+s.style.left=cx+'px';s.style.top=cy+'px';s.style.color=col[Math.floor(Math.random()*col.length)];
+s.style.fontSize=(14+Math.random()*22)+'px';
+s.style.setProperty('--x',Math.cos(a)*d+'px');s.style.setProperty('--y',Math.sin(a)*d+'px');s.style.setProperty('--r',(Math.random()*540-270)+'deg');
+document.body.appendChild(s);(function(s){setTimeout(function(){s.remove()},1600)})(s)}}
+h.addEventListener('click',function(){
+m.classList.add('show');hint.style.display='none';
+h.classList.remove('pop');void h.offsetWidth;h.classList.add('pop');
+burst();
+for(var i=0;i<18;i++){(function(i){setTimeout(function(){
+var s=document.createElement('span');s.className='fly';s.textContent='\u2665';
+s.style.left=(10+Math.random()*80)+'vw';s.style.bottom='-30px';
+s.style.fontSize=(18+Math.random()*34)+'px';s.style.setProperty('--r',(Math.random()*60-30)+'deg');
+document.body.appendChild(s);setTimeout(function(){s.remove()},2300)},i*90)})(i)}
+});
+</script>
+</body>
+</html>
